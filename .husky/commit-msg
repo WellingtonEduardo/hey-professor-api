@@ -11,10 +11,10 @@ echo "Branch Name: $BRANCH_NAME"  # Para depuração
 echo "Commit Message: $COMMIT_MESSAGE"  # Para depuração
 
 # Proíbe commits nas branches main e develop
-# if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "develop" ]; then
-#     echo -e "${BRed}Erro: Commits não são permitidos nas branches 'main' ou 'develop'.${NC}"
-#     exit 1
-# fi
+if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "develop" ]; then
+    echo -e "${BRed}Erro: Commits não são permitidos nas branches 'main' ou 'develop'.${NC}"
+    exit 1
+fi
 
 # Verifica se a branch segue o padrão de Issue ID
 ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
