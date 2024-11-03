@@ -1,25 +1,33 @@
+#!/bin/bash
 
-#cores
 NC='\033[0m'
-BBlue='\033[1;34m'
 BRed='\033[1;31m'
 
-REGEX_ISSUE_ID="[a-zA-Z0-9,\.\_\-]+-[0-9]+"
+REGEX_ISSUE_ID="[a-zA-Z0-9,._-]+-[0-9]+"
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
-
-ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
 COMMIT_MESSAGE=$(cat "$1")
 
+echo "Branch Name: $BRANCH_NAME"  # Para depuração
+echo "Commit Message: $COMMIT_MESSAGE"  # Para depuração
+
+# Proíbe commits nas branches main e develop
+# if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "develop" ]; then
+#     echo -e "${BRed}Erro: Commits não são permitidos nas branches 'main' ou 'develop'.${NC}"
+#     exit 1
+# fi
+
+# Verifica se a branch segue o padrão de Issue ID
+ISSUE_ID=$(echo "$BRANCH_NAME" | grep -o -E "$REGEX_ISSUE_ID")
+
 if [ -z "$ISSUE_ID" ]; then
-    echo -e "${BRed}Branch não está no padrão que deveria. ${NC}"
+    echo -e "${BRed}Erro: A branch não segue o padrão esperado. Um Issue ID deve estar presente na branch.${NC}"
     exit 1
 fi
 
-# prevent adding a issue key in commits that already have a JIRA issue key
-# i.g. HEY-1: HEY-1: my feature
-
-if [[ $COMMIT_MESSAGE == $ISSUE_ID* ]]; then
+# Previne duplicação do Issue ID no commit
+if echo "$COMMIT_MESSAGE" | grep -q "^$ISSUE_ID"; then
     exit 0
 fi
 
-echo "$ISSUE_ID: $COMMIT_MESSAGE" >$1
+# Prefixa o commit com o Issue ID
+echo "$ISSUE_ID: $COMMIT_MESSAGE" > "$1"

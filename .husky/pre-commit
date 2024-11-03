@@ -1,4 +1,5 @@
 
+
 # Rodar o phpstan
 ./vendor/bin/phpstan
 if [ $? -ne 0 ]; then
