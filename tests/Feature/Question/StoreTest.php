@@ -37,3 +37,14 @@ test('after creating a new question, I need to make sure that it crates on _draf
         'question' => 'Lorem ipsum Lorem ipsum?',
     ]);
 });
+
+describe('Validations rules', function () {
+    it('Question::required', function () {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        postJson(route('questions.store'), [])->assertJsonValidationErrors([
+            'question' => 'required',
+        ]);
+    });
+});
