@@ -40,7 +40,7 @@ test('after creating a new question, I need to make sure that it crates on _draf
 
 describe('Validations rules', function () {
 
-    it('Question::required', function () {
+    test('Question::required', function () {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
@@ -49,7 +49,7 @@ describe('Validations rules', function () {
         ]);
     });
 
-    it('question::ending with question mark', function () {
+    test('question::ending with question mark', function () {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
@@ -59,4 +59,16 @@ describe('Validations rules', function () {
             'question' => 'The question should end with question mark (?)',
         ]);
     });
+
+    test('question::min characters should be 10', function () {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        postJson(route('questions.store'), [
+            'question' => 'Question?',
+        ])->assertJsonValidationErrors([
+            'question' => 'least 10 characters.',
+        ]);
+    });
+
 });
