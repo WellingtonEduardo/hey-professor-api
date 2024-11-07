@@ -14,7 +14,7 @@ return new class () extends Migration {
             $table->id();
             $table->foreignId('user_id')->index();
             $table->text('question');
-            $table->boolean('draft')->default(true);
+            $table->text('status');
             $table->timestamps();
         });
     }

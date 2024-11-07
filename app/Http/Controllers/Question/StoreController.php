@@ -15,6 +15,7 @@ class StoreController extends Controller
     {
         $question = Question::create([
             'question' => $request->question,
+            'status'   => 'draft',
             'user_id'  => auth()->user()->id,
         ]);
 
