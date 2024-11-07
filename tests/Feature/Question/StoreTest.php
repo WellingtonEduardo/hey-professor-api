@@ -39,12 +39,24 @@ test('after creating a new question, I need to make sure that it crates on _draf
 });
 
 describe('Validations rules', function () {
+
     it('Question::required', function () {
         $user = User::factory()->create();
         Sanctum::actingAs($user);
 
         postJson(route('questions.store'), [])->assertJsonValidationErrors([
             'question' => 'required',
+        ]);
+    });
+
+    it('question::ending with question mark', function () {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        postJson(route('questions.store'), [
+            'question' => 'Lorem ipsum mak test',
+        ])->assertJsonValidationErrors([
+            'question' => 'The question should end with question mark (?)',
         ]);
     });
 });
