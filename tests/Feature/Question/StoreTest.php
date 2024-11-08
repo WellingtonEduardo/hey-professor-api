@@ -23,7 +23,7 @@ it('should be able to store a new question', function () {
     ]);
 });
 
-test('after creating a new question, I need to make sure that it crates on _draft_status', function () {
+test('with the creation of the question, we need to make sure that it crates with status  _draft', function () {
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
@@ -92,4 +92,26 @@ describe('Validations rules', function () {
         ]);
     });
 
+});
+
+test('after creating we should return a status 201 with the created question', function () {
+
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+
+    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+
+    $response = postJson(route('questions.store'), [
+        'question' => $uniqueQuestion,
+    ])->assertCreated();
+
+    $question = Question::latest()->first();
+
+    $response->assertJson([
+        'id'         => $question->id,
+        'question'   => $question->question,
+        'status'     => $question->status,
+        'created_at' => $question->created_at->format('Y-m-d'),
+        'updated_at' => $question->updated_at->format('Y-m-d'),
+    ]);
 });
