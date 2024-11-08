@@ -1,23 +1,25 @@
 <?php
 
-use App\Models\User;
+use App\Models\{Question, User};
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertDatabaseHas, postJson};
 
 it('should be able to store a new question', function () {
+
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
+    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
     // Executa a requisição e guarda a resposta
     $response = postJson(route('questions.store'), [
-        'question' => 'Lorem ipsum Lorem ipsum?',
+        'question' => $uniqueQuestion,
     ])->assertSuccessful();
 
     // Verifica se a pergunta foi criada no banco de dados
     assertDatabaseHas('questions', [
         'user_id'  => $user->id,
-        'question' => 'Lorem ipsum Lorem ipsum?',
+        'question' => $uniqueQuestion,
     ]);
 });
 
@@ -25,16 +27,18 @@ test('after creating a new question, I need to make sure that it crates on _draf
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
+    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+
     // Executa a requisição e guarda a resposta
     $response = postJson(route('questions.store'), [
-        'question' => 'Lorem ipsum Lorem ipsum?',
+        'question' => $uniqueQuestion,
     ])->assertSuccessful();
 
     // Verifica se a pergunta foi criada no banco de dados
     assertDatabaseHas('questions', [
         'user_id'  => $user->id,
         'status'   => 'draft',
-        'question' => 'Lorem ipsum Lorem ipsum?',
+        'question' => $uniqueQuestion,
     ]);
 });
 
@@ -68,6 +72,23 @@ describe('Validations rules', function () {
             'question' => 'Question?',
         ])->assertJsonValidationErrors([
             'question' => 'least 10 characters.',
+        ]);
+    });
+
+    test('question::should be unique', function () {
+        $user = User::factory()->create();
+        Sanctum::actingAs($user);
+
+        Question::factory()->create([
+            'question' => 'Lorem test mak lorem?',
+            'user_id'  => $user->id,
+            'status'   => 'draft',
+        ]);
+
+        postJson(route('questions.store'), [
+            'question' => 'Lorem test mak lorem?',
+        ])->assertJsonValidationErrors([
+            'question' => 'The question has already been taken.',
         ]);
     });
 
