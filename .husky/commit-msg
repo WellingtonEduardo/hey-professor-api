@@ -7,8 +7,7 @@ REGEX_ISSUE_ID="[a-zA-Z0-9,._-]+-[0-9]+"
 BRANCH_NAME=$(git symbolic-ref --short HEAD)
 COMMIT_MESSAGE=$(cat "$1")
 
-echo "Branch Name: $BRANCH_NAME"  # Para depuração
-echo "Commit Message: $COMMIT_MESSAGE"  # Para depuração
+
 
 # Proíbe commits nas branches main e develop
 if [ "$BRANCH_NAME" = "main" ] || [ "$BRANCH_NAME" = "develop" ]; then
