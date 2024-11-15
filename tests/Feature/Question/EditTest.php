@@ -61,6 +61,7 @@ describe('Validations rules', function () {
             'question' => 'least 10 characters.',
         ]);
     });
+
     test('question::should be unique', function () {
         $user     = User::factory()->create();
         $question = Question::factory()->create(['user_id' => $user->id]);
@@ -77,6 +78,21 @@ describe('Validations rules', function () {
         ])->assertJsonValidationErrors([
             'question' => 'The question has already been taken.',
         ]);
+    });
+
+    test('question::should be unique only if id is different', function () {
+        $user           = User::factory()->create();
+        $uniqueQuestion = uniqid() . 'Lorem update mak lorem?';
+        $question       = Question::factory()->create([
+            'user_id'  => $user->id,
+            'question' => $uniqueQuestion,
+
+        ]);
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => $uniqueQuestion,
+        ])->assertOk();
     });
 
 });

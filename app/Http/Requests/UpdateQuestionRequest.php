@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Rules\WithQuestionMark;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateQuestionRequest extends FormRequest
 {
@@ -22,8 +23,21 @@ class UpdateQuestionRequest extends FormRequest
      */
     public function rules(): array
     {
+        $question = $this->route('question');
+
+        // Ensure $question is an object with an id property, or handle the case where it might not be
+        if (is_object($question) && isset($question->id)) {
+            $questionId = $question->id;
+        } else {
+            // Handle the case where the question is not found or it's not the expected object
+            $questionId = null; // or throw an exception or handle as needed
+        }
+
         return [
-            'question' => ['required' , new WithQuestionMark(),  'min:10', 'unique:questions'],
+            'question' => ['required', new WithQuestionMark(), 'min:10',
+                Rule::unique('questions')->ignore($questionId),
+            ],
         ];
     }
+
 }
