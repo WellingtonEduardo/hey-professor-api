@@ -26,4 +26,9 @@ class QuestionPolicy
         return $question->user->is($user);
     }
 
+    public function publish(User $user, Question $question): bool
+    {
+        return $question->user->is($user);
+    }
+
 }
