@@ -21,4 +21,9 @@ class QuestionPolicy
         return $question->user->is($user);
     }
 
+    public function restore(User $user, Question $question): bool
+    {
+        return $question->user->is($user);
+    }
+
 }
