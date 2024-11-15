@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Question;
 use App\Rules\WithQuestionMark;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class UpdateQuestionRequest extends FormRequest
@@ -13,7 +15,7 @@ class UpdateQuestionRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('update', $this->route('question'));
     }
 
     /**
@@ -23,19 +25,15 @@ class UpdateQuestionRequest extends FormRequest
      */
     public function rules(): array
     {
+        /**
+         * @var Question $question
+         */
         $question = $this->route('question');
-
-        // Ensure $question is an object with an id property, or handle the case where it might not be
-        if (is_object($question) && isset($question->id)) {
-            $questionId = $question->id;
-        } else {
-            // Handle the case where the question is not found or it's not the expected object
-            $questionId = null; // or throw an exception or handle as needed
-        }
+        $id       = $question->id;
 
         return [
             'question' => ['required', new WithQuestionMark(), 'min:10',
-                Rule::unique('questions')->ignore($questionId),
+                Rule::unique('questions')->ignore($id),
             ],
         ];
     }
