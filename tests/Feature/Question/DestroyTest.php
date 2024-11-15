@@ -14,7 +14,6 @@ it('should be able to destroy a question', function () {
 
     deleteJson(route('questions.destroy', $question))->assertNoContent();
 
-    // Verifica se a pergunta foi criada no banco de dados
     assertDatabaseMissing('questions', [
         'id' => $question->id,
     ]);
