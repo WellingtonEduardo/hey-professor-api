@@ -61,5 +61,22 @@ describe('Validations rules', function () {
             'question' => 'least 10 characters.',
         ]);
     });
+    test('question::should be unique', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create(['user_id' => $user->id]);
+        Sanctum::actingAs($user);
+
+        Question::factory()->create([
+            'question' => 'Lorem test1 update mak lorem?',
+            'user_id'  => $user->id,
+            'status'   => 'draft',
+        ]);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Lorem test1 update mak lorem?',
+        ])->assertJsonValidationErrors([
+            'question' => 'The question has already been taken.',
+        ]);
+    });
 
 });
