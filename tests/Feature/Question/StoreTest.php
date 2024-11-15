@@ -29,8 +29,7 @@ test('with the creation of the question, we need to make sure that it crates wit
 
     $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
 
-    // Executa a requisição e guarda a resposta
-    $response = postJson(route('questions.store'), [
+    postJson(route('questions.store'), [
         'question' => $uniqueQuestion,
     ])->assertSuccessful();
 
@@ -105,7 +104,8 @@ test('after creating we should return a status 201 with the created question', f
         'question' => $uniqueQuestion,
     ])->assertCreated();
 
-    $question = Question::latest()->first();
+    $questionId = $response->json('data.id');
+    $question   = Question::findOrFail($questionId);
 
     $response->assertJson([
         'data' => [
