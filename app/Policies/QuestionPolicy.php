@@ -16,4 +16,9 @@ class QuestionPolicy
         return $question->user->is($user);
     }
 
+    public function archive(User $user, Question $question): bool
+    {
+        return $question->user->is($user);
+    }
+
 }

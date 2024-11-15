@@ -34,8 +34,7 @@ describe('security', function () {
             deleteJson(route('questions.destroy', $question))->assertForbidden();
 
             assertDatabaseHas('questions', [
-                'id'       => $question->id,
-                'question' => $question->question,
+                'id' => $question->id,
             ]);
 
         }

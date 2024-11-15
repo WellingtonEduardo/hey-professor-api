@@ -10,6 +10,7 @@ class ArchiveController extends Controller
 {
     public function __invoke(Question $question): Response
     {
+        $this->authorize('archive', $question);
         $question->delete();
 
         return response()->noContent();
