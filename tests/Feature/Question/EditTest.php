@@ -139,3 +139,34 @@ describe('security', function () {
     );
 
 });
+
+test('after creating we should return a status 200 with the update question', function () {
+
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+
+    $question = Question::factory()->create(['user_id' => $user->id]);
+
+    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+
+    $response = putJson(route('questions.update', $question), [
+        'question' => $uniqueQuestion,
+    ])->assertOk();
+
+    $questionId = $response->json('data.id');
+    $question   = Question::findOrFail($questionId);
+
+    $response->assertJson([
+        'data' => [
+            'id'         => $question->id,
+            'question'   => $question->question,
+            'status'     => $question->status,
+            'created_by' => [
+                'id'   => $user->id,
+                'name' => $user->name,
+            ],
+            'created_at' => $question->created_at->format('Y-m-d'),
+            'updated_at' => $question->updated_at->format('Y-m-d'),
+        ],
+    ]);
+});
