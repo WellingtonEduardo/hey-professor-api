@@ -38,4 +38,16 @@ describe('Validations rules', function () {
         ]);
     });
 
+    test('question::ending with question mark', function () {
+        $user     = User::factory()->create();
+        $question = Question::factory()->create(['user_id' => $user->id]);
+        Sanctum::actingAs($user);
+
+        putJson(route('questions.update', $question), [
+            'question' => 'Lorem ipsum mak test',
+        ])->assertJsonValidationErrors([
+            'question' => 'The question should end with question mark (?)',
+        ]);
+    });
+
 });
