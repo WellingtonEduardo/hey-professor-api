@@ -48,3 +48,21 @@ describe('security', function () {
     );
 
 });
+
+it(
+    'should only restore when the question is deleted',
+    function () {
+        $user = User::factory()->create();
+
+        Sanctum::actingAs($user);
+
+        $question = Question::factory()->create(['user_id' => $user->id]);
+
+        putJson(route('questions.restore', $question))->assertNotFound();
+
+        assertNotSoftDeleted('questions', [
+            'id' => $question->id,
+        ]);
+
+    }
+);
