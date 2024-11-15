@@ -5,7 +5,7 @@ use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\{assertNotSoftDeleted, assertSoftDeleted, deleteJson};
 
-it('should be able to arquive a question', function () {
+it('should be able to archive a question', function () {
 
     $user     = User::factory()->create();
     $question = Question::factory()->create(['user_id' => $user->id]);
