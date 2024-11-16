@@ -16,7 +16,8 @@ class RegisterController extends Controller
             'password' => ['required', 'min:8', 'max:40'],
 
         ]);
-        User::create($data);
+        $user = User::create($data);
+        auth()->login($user);
 
         return response(['message' => 'Registered with success.'], 200);
     }
