@@ -59,4 +59,20 @@ describe('validations', function () {
         'email'    => ['The email field must be a valid email address', 'not-email'],
 
     ]);
+
+    test('password', function ($rule, $value) {
+
+        postJson(route('register'), [
+            'password' => $value,
+
+        ])->assertJsonValidationErrors([
+            'password' => $rule,
+        ]);
+
+    })->with([
+        'required' => ['required', ''],
+        'min:8'    => ['at least 8 characters', 'Ab'],
+        'max:40'   => ['greater than 40 characters', str_repeat('*', 41)],
+
+    ]);
 });
