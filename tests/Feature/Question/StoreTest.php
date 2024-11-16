@@ -10,7 +10,7 @@ it('should be able to store a new question', function () {
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
-    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+    $uniqueQuestion = 'Lorem ipsum ipsum?';
     // Executa a requisição e guarda a resposta
     $response = postJson(route('questions.store'), [
         'question' => $uniqueQuestion,
@@ -27,7 +27,7 @@ test('with the creation of the question, we need to make sure that it crates wit
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
-    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+    $uniqueQuestion = 'Lorem ipsum ipsum?';
 
     postJson(route('questions.store'), [
         'question' => $uniqueQuestion,
@@ -98,7 +98,7 @@ test('after creating we should return a status 201 with the created question', f
     $user = User::factory()->create();
     Sanctum::actingAs($user);
 
-    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+    $uniqueQuestion = 'Lorem ipsum ipsum?';
 
     $response = postJson(route('questions.store'), [
         'question' => $uniqueQuestion,

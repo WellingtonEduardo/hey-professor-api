@@ -12,7 +12,7 @@ it('should be able to update a question', function () {
 
     Sanctum::actingAs($user);
 
-    $uniqueQuestion = uniqid() . 'update ipsum ipsum? ';
+    $uniqueQuestion = 'update ipsum ipsum?';
 
     putJson(route('questions.update', $question), [
         'question' => $uniqueQuestion,
@@ -82,7 +82,7 @@ describe('Validations rules', function () {
 
     test('question::should be unique only if id is different', function () {
         $user           = User::factory()->create();
-        $uniqueQuestion = uniqid() . 'Lorem update mak lorem?';
+        $uniqueQuestion = 'Lorem update mak lorem?';
         $question       = Question::factory()->create([
             'user_id'  => $user->id,
             'question' => $uniqueQuestion,
@@ -147,7 +147,7 @@ test('after creating we should return a status 200 with the update question', fu
 
     $question = Question::factory()->create(['user_id' => $user->id]);
 
-    $uniqueQuestion = uniqid() . 'Lorem ipsum ipsum? ';
+    $uniqueQuestion = 'Lorem ipsum ipsum?';
 
     $response = putJson(route('questions.update', $question), [
         'question' => $uniqueQuestion,
