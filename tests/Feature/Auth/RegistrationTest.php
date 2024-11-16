@@ -43,4 +43,20 @@ describe('validations', function () {
         'max:255'  => ['greater than 255 characters.', str_repeat('*', 256)],
     ]);
 
+    test('email', function ($rule, $value) {
+
+        postJson(route('register'), [
+            'email' => $value,
+
+        ])->assertJsonValidationErrors([
+            'email' => $rule,
+        ]);
+
+    })->with([
+        'required' => ['required', ''],
+        'min:3'    => ['at least 3 characters', 'Ab'],
+        'max:255'  => ['greater than 255 characters', str_repeat('*', 256)],
+        'email'    => ['The email field must be a valid email address', 'not-email'],
+
+    ]);
 });
