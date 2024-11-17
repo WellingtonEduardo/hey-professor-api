@@ -19,6 +19,6 @@ class RegisterController extends Controller
         $user = User::create($data);
         auth()->login($user);
 
-        return response(['message' => 'Registered with success.'], 200);
+        return response(['message' => 'Registered with success.', 'user' => $user], 200);
     }
 }
