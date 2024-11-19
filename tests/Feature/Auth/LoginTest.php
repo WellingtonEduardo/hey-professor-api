@@ -38,3 +38,15 @@ it('should check if the email and password is invalid', function ($email, $passw
     'wrong password' => ['teste@gmail.com', 'password1234'],
     'invalid email'  => ['invalid-email', '123456789'],
 ]);
+
+test('required fields', function () {
+
+    postJson(route('login'), [
+        'email'    => '',
+        'password' => '',
+    ])->assertJsonValidationErrors([
+        'email'    => __('validation.required', ['attribute' => 'email']),
+        'password' => __('validation.required', ['attribute' => 'password']),
+    ]);
+
+});
