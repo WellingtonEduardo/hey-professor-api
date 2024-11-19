@@ -15,21 +15,13 @@ return [
     |
     */
 
-    'paths' => ['*'],
-
-    'allowed_methods' => ['*'],
-
-
-    'allowed_origins' => ['*'],
-
+    'paths'                    => ['*'], // Rotas que suportam CORS
+    'allowed_methods'          => ['*'], // Métodos permitidos
+    'allowed_origins'          => ['http://localhost:5173'], // Domínio do frontend
     'allowed_origins_patterns' => [],
-
-    'allowed_headers' => ['*'],
-
-    'exposed_headers' => [],
-
-    'max_age' => 0,
-
-    'supports_credentials' => true,
+    'allowed_headers'          => ['*'], // Cabeçalhos permitidos
+    'exposed_headers'          => [],
+    'max_age'                  => 0,
+    'supports_credentials'     => true,
 
 ];

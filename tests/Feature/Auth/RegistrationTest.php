@@ -8,32 +8,30 @@ use function PHPUnit\Framework\assertTrue;
 
 it('should be able to register in the application', function () {
 
-    $uniqueEmail = 'john.doe@example.com';
-
     postJson(route('register'), [
-        'name'     => 'John Doe',
-        'email'    => $uniqueEmail,
-        'password' => 'password',
+        'name'               => 'John Doe',
+        'email'              => 'john.doe@example.com',
+        'email_confirmation' => 'john.doe@example.com',
+        'password'           => 'password',
     ])->assertOk();
 
     assertDatabaseHas('users', [
         'name'  => 'John Doe',
-        'email' => $uniqueEmail,
+        'email' => 'john.doe@example.com',
     ]);
 
-    $joeDoe = User::whereEmail($uniqueEmail)->first();
+    $joeDoe = User::whereEmail('john.doe@example.com')->first();
 
     assertTrue(Hash::check('password', $joeDoe->password));
 });
 
 it('should log the new user in the system', function () {
 
-    $uniqueEmail = 'john.doe@example.com';
-
     postJson(route('register'), [
-        'name'     => 'John Doe',
-        'email'    => $uniqueEmail,
-        'password' => 'password',
+        'name'               => 'John Doe',
+        'email'              => 'john.doe@example.com',
+        'email_confirmation' => 'john.doe@example.com',
+        'password'           => 'password',
     ])->assertOk();
 
     $user = User::first();
@@ -59,20 +57,26 @@ describe('validations', function () {
     ]);
 
     test('email', function ($rule, $value) {
+        if ($rule == 'email has already been taken') {
+            User::factory()->create(['email' => $value]);
+        }
 
         postJson(route('register'), [
-            'email' => $value,
+            'email'    => $value,
+            'password' => 'password',
+            'name'     => 'Teste',
 
         ])->assertJsonValidationErrors([
             'email' => $rule,
         ]);
 
     })->with([
-        'required' => ['required', ''],
-        'min:3'    => ['at least 3 characters', 'Ab'],
-        'max:255'  => ['greater than 255 characters', str_repeat('*', 256)],
-        'email'    => ['The email field must be a valid email address', 'not-email'],
-
+        'required'  => ['required', ''],
+        'min:3'     => ['at least 3 characters', 'Ab'],
+        'max:255'   => ['greater than 255 characters', str_repeat('*', 256)],
+        'email'     => ['The email field must be a valid email address', 'not-email'],
+        'unique'    => ['email has already been taken', 'teste@gmail.com'],
+        'confirmed' => ['email field confirmation does not match', 'teste@gmail.com'],
     ]);
 
     test('password', function ($rule, $value) {
