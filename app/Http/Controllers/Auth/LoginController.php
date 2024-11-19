@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\{JsonResponse, Request};
+use Illuminate\Http\{ Request, Response};
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
 {
-    public function __invoke(Request $request): JsonResponse
+    public function __invoke(Request $request): Response
     {
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
@@ -19,7 +19,7 @@ class LoginController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return response()->json(['message' => __('Welcome!')]);
+            return response()->noContent();
         }
 
         throw ValidationException::withMessages([

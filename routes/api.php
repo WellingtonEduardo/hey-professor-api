@@ -1,17 +1,14 @@
 <?php
 
 use App\Http\Controllers\{Auth, Question};
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/users', function (Request $request) {
-    return User::all();
+Route::middleware(['guest', 'web'])->group(function () {
+    Route::post('/register', Auth\RegisterController::class)->name('register');
+    Route::post('/login', Auth\LoginController::class)->name('login');
 });
-
-Route::post('/register', Auth\RegisterController::class)->name('register');
-Route::post('/login', Auth\LoginController::class)->name('login');
 Route::middleware(['auth:sanctum', StartSession::class])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
