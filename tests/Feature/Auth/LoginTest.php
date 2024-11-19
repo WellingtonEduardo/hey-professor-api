@@ -18,3 +18,23 @@ it('should be able to login', function () {
 
     assertAuthenticatedAs($user);
 });
+
+it('should check if the email and password is invalid', function ($email, $password) {
+
+    User::factory()->create([
+        'email'    => 'teste@gmail.com',
+        'password' => Hash::make('123456789'),
+    ]);
+
+    postJson(route('login'), [
+        'email'    => $email,
+        'password' => $password,
+    ])->assertJsonValidationErrors([
+        'email' => __('auth.failed'),
+    ]);
+
+})->with([
+    'wrong email'    => ['wrong@email.com', '123456789'],
+    'wrong password' => ['teste@gmail.com', 'password1234'],
+    'invalid email'  => ['invalid-email', '123456789'],
+]);

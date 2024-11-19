@@ -11,20 +11,16 @@ class LoginController extends Controller
 {
     public function __invoke(Request $request): Response
     {
-        $credentials = $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required'],
-        ]);
 
-        if (Auth::attempt($credentials)) {
+        if (Auth::attempt($request->only(['email', 'password']))) {
             $request->session()->regenerate();
 
             return response()->noContent();
         }
 
         throw ValidationException::withMessages([
-            'email' => __('The provided credentials do not match our records.'),
-            'dados' => $credentials,
+            'email' => __('auth.failed'),
+
         ]);
     }
 }
