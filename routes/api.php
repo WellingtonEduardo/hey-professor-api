@@ -5,11 +5,16 @@ use Illuminate\Http\Request;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['guest', 'web'])->group(function () {
+Route::middleware(['web'])->group(function () {
     Route::post('/register', Auth\RegisterController::class)->name('register');
     Route::post('/login', Auth\LoginController::class)->name('login');
 });
+
+Route::post('/logout', Auth\LogoutController::class)
+    ->middleware(['web', 'auth'])
+    ->name('logout');
 Route::middleware(['auth:sanctum', StartSession::class])->group(function () {
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
