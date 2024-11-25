@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Question;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\QuestionResource;
-use App\Models\Question;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,9 +20,14 @@ class MyQuestionsController extends Controller
             ['status' => ['required', 'in:draft,published,archived']]
         );
 
-        $questions = Question::query()
-        ->whereStatus($status)
-        ->whereUserId(auth()->id())->get();
+        $questions = user()
+        ->questions()
+        ->when(
+            $status === 'archived',
+            fn (Builder $query) => $query->onlyTrashed(),
+            fn (Builder $query) => $query->whereStatus($status)
+        )
+        ->get();
 
         return QuestionResource::collection($questions);
     }
