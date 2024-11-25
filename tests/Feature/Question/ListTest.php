@@ -15,7 +15,6 @@ it('should be able to list only published questions', function () {
     $response = getJson(route('questions.index'))
         ->assertOk();
 
-    // dd($response);
     $response->assertJsonFragment([
         'id'         => $published->id,
         'question'   => $published->question,
