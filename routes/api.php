@@ -18,7 +18,7 @@ Route::middleware(['auth:sanctum', StartSession::class])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-
+    Route::get('/questions', Question\IndexController::class)->name('questions.index');
     Route::post('/questions', Question\StoreController::class)->name('questions.store');
     Route::put('/questions/{question}', Question\UpdateController::class)->name('questions.update');
     Route::delete('/questions/{question}', Question\DestroyController::class)->name('questions.destroy');
