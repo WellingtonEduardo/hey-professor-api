@@ -14,7 +14,7 @@ class IndexController extends Controller
         $questions = Question::query()
         ->published()
         ->search(request()->q)
-        ->paginate();
+        ->get();
 
         return QuestionResource::collection($questions);
     }
