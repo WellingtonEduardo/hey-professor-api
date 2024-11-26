@@ -8,7 +8,7 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Validator;
 
-class MyQuestionsController extends Controller
+class MyController extends Controller
 {
     public function __invoke(): AnonymousResourceCollection
     {
