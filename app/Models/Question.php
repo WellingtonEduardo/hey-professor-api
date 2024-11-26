@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
+/**
+ * @property int $votes_sum_like
+ * @property int $votes_sum_unlike
+ */
 class Question extends Model
 {
     /** @use HasFactory<\Database\Factories\QuestionFactory> */
@@ -14,8 +18,7 @@ class Question extends Model
     use SoftDeletes;
 
     /**
-     * Define a relação 'user' com o modelo User.
-     *
+
      * @return BelongsTo<User, $this>
      */
     public function user(): BelongsTo
