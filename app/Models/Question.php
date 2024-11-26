@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, HasMany};
 use Illuminate\Database\Eloquent\{Model, SoftDeletes};
 
 /**
- * @property int $votes_sum_like
- * @property int $votes_sum_unlike
+ * @property-read int $votes_sum_like
+ * @property-read int $votes_sum_unlike
  */
 class Question extends Model
 {
