@@ -10,7 +10,8 @@ it('should be able to list only published questions', function () {
     Sanctum::actingAs($user);
 
     $published = Question::factory()->published()->create();
-    $draft     = Question::factory()->draft()->create();
+    $published->votes()->create(['user_id' => 1, 'like' => true]);
+    $draft = Question::factory()->draft()->create();
 
     $response = getJson(route('questions.index'))
         ->assertOk();
@@ -23,8 +24,10 @@ it('should be able to list only published questions', function () {
             'id'   => $published->user->id,
             'name' => $published->user->name,
         ],
-        'created_at' => $published->created_at->format('Y-m-d'),
-        'updated_at' => $published->updated_at->format('Y-m-d'),
+        'votes_sum_like'   => 1,
+        'votes_sum_unlike' => 0,
+        'created_at'       => $published->created_at->format('Y-m-d'),
+        'updated_at'       => $published->updated_at->format('Y-m-d'),
 
         // TODO: add like and unlike count
     ])->assertJsonMissing([

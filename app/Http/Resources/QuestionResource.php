@@ -15,6 +15,7 @@ class QuestionResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         /** @var Question $this */
         return [
             'id'         => $this->id,
@@ -24,8 +25,10 @@ class QuestionResource extends JsonResource
                 'id'   => $this->user->id,
                 'name' => $this->user->name,
             ],
-            'created_at' => $this->created_at->format('Y-m-d'),
-            'updated_at' => $this->updated_at->format('Y-m-d'),
+            'votes_sum_like'   => $this->votes_sum_like ?: 0,
+            'votes_sum_unlike' => $this->votes_sum_unlike ?: 0,
+            'created_at'       => $this->created_at->format('Y-m-d'),
+            'updated_at'       => $this->updated_at->format('Y-m-d'),
         ];
     }
 }
