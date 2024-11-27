@@ -18,9 +18,10 @@ Route::middleware(['auth:sanctum', StartSession::class])->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::get('/my-questions/{status}', Question\MyQuestionsController::class)->name('my-questions');
+    Route::get('/my-questions/{status}', Question\MyController::class)->name('my-questions');
     Route::get('/questions', Question\IndexController::class)->name('questions.index');
     Route::post('/questions', Question\StoreController::class)->name('questions.store');
+    Route::get('/questions/download', Question\DownloadController::class)->name('questions.download');
     Route::put('/questions/{question}', Question\UpdateController::class)->name('questions.update');
     Route::delete('/questions/{question}', Question\DestroyController::class)->name('questions.destroy');
     Route::delete('/questions/{question}/archive', Question\ArchiveController::class)->name('questions.archive');
