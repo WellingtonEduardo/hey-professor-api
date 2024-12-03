@@ -16,7 +16,7 @@ class IndexController extends Controller
         ->search(request()->q)
         ->withSum('votes', 'like')
         ->withSum('votes', 'unlike')
-        ->get();
+        ->paginate(10);
 
         return QuestionResource::collection($questions);
     }
