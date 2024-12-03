@@ -13,7 +13,7 @@ return new class () extends Migration {
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Question::class)->constrained();
+            $table->foreignIdFor(Question::class)->constrained()->onDelete('cascade');
             $table->boolean('like')->default(0);
             $table->boolean('unlike')->default(0);
             $table->foreignIdFor(User::class)->constrained();
